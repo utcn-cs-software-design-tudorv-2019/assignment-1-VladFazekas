@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane prefHeight="614.0" prefWidth="861.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.controllers.TeacherController">
+   <children>
+      <Button fx:id="logoutButton" layoutX="757.0" layoutY="560.0" mnemonicParsing="false" onAction="#handleLogoutClick" prefHeight="26.0" prefWidth="64.0" text="Logout" />
+      <ScrollPane layoutX="27.0" layoutY="22.0">
+         <content>
+            <TableView fx:id="studentTable" editable="true" prefHeight="260.0" prefWidth="452.0">
+              <columns>
+                <TableColumn fx:id="nume" prefWidth="75.0" text="Nume" />
+                <TableColumn fx:id="cnp" prefWidth="75.0" text="cnp" />
+                  <TableColumn fx:id="icn" prefWidth="75.0" text="icn" />
+                  <TableColumn fx:id="adress" prefWidth="75.0" text="adress" />
+                  <TableColumn fx:id="materii" prefWidth="75.0" text="materii" />
+                  <TableColumn fx:id="grupa" prefWidth="75.0" text="grupa" />
+              </columns>
+            </TableView>
+         </content>
+      </ScrollPane>
+      <Button layoutX="27.0" layoutY="302.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="83.0" text="Update" />
+      <Button layoutX="27.0" layoutY="340.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="83.0" text="Delete" />
+      <TextField fx:id="teacherID" editable="false" layoutX="672.0" layoutY="22.0" />
+      <TextField fx:id="teacherName" editable="false" layoutX="672.0" layoutY="59.0" />
+      <TextField fx:id="teacherCNP" editable="false" layoutX="672.0" layoutY="97.0" />
+      <Label layoutX="588.0" layoutY="26.0" text="Id Profesor:" />
+      <Label layoutX="577.0" layoutY="63.0" text="Nume profesor:" />
+      <Label layoutX="584.0" layoutY="101.0" text="cnp profesor:" />
+      <ScrollPane layoutX="519.0" layoutY="207.0">
+         <content>
+            <TableView fx:id="examenTable" prefHeight="315.0" prefWidth="326.0">
+              <columns>
+                <TableColumn fx:id="materie" prefWidth="94.0" text="nume materie" />
+                <TableColumn fx:id="student" prefWidth="90.0" text="nume student" />
+                  <TableColumn fx:id="nota" prefWidth="33.0" text="nota" />
+                  <TableColumn fx:id="data" prefWidth="107.0" text="data examen" />
+              </columns>
+            </TableView>
+         </content>
+      </ScrollPane>
+      <Button fx:id="generareButton" layoutX="747.0" layoutY="172.0" mnemonicParsing="false" onAction="#generateReport" text="generate report" />
+      <DatePicker fx:id="dateFrom" layoutX="567.0" layoutY="141.0" />
+      <DatePicker fx:id="dateTo" layoutX="567.0" layoutY="172.0" />
+      <Label layoutX="528.0" layoutY="145.0" text="From:" />
+      <Label layoutX="535.0" layoutY="176.0" text="To:" />
+      <ComboBox fx:id="comboMaterii" layoutX="289.0" layoutY="409.0" prefWidth="150.0" />
+      <Label layoutX="214.0" layoutY="413.0" text="Materie:" />
+      <DatePicker fx:id="dataExamen" layoutX="264.0" layoutY="454.0" />
+      <Label layoutX="214.0" layoutY="458.0" text="Data" />
+      <Label layoutX="213.0" layoutY="493.0" text="nota:" />
+      <TextField fx:id="notaExamen" layoutX="289.0" layoutY="489.0" />
+      <Button fx:id="gradeExam" layoutX="351.0" layoutY="524.0" mnemonicParsing="false" onAction="#gradeExam" text="grade exam" />
+   </children>
+</AnchorPane>
