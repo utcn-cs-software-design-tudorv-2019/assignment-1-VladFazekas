@@ -1,7 +1,9 @@
 package sample.business;
 
 import sample.database.DatabaseConnection;
+import sample.database.StudentDAL;
 import sample.database.StudentQueries;
+import sample.entity.Student;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -10,54 +12,34 @@ import java.util.List;
 
 public class StudentLogic {
 
-    DatabaseConnection database = new DatabaseConnection();
-    StudentQueries studentQueries = new StudentQueries();
-    String query = null;
+    StudentDAL studentDAL = new StudentDAL();
 
-    public ResultSet getStudentInfo(int id){
+    public Student getStudentInfo(int id){
+        return studentDAL.getStudentInfo(id == 0 ? 1 : id);
+    }
 
-        query = studentQueries.getStudentInfoById(String.valueOf(id));
-        ResultSet result = database.getResultByStatement(query);
-        return result;
+    public void enroll(int id, String classs) throws IllegalArgumentException{
+        studentDAL.enroll(id, classs);
+    }
+
+    public void updateInfo(int id, String cnp, String name, String adress) {
+        studentDAL.updateInfo(id, cnp, name, adress);
+    }
+
+    public void addStudInfo(int id, String text, String text1) {
+        studentDAL.addStudInfo(id, text, text1);
+    }
+
+    public void deleteStudInfo(int id) {
+        studentDAL.deleteStudInfo(id);
+    }
+
+    public void updateStudInfo(int id, String text, String text1) {
+        studentDAL.updateStudInfo(id, text, text1);
     }
 
     public List<String> parseList(String classes){
         return Arrays.asList(classes.split(","));
     }
 
-    public void enroll(int id, String classs) throws IllegalArgumentException{
-
-        query = studentQueries.getStudentInfoById(String.valueOf(id));
-        ResultSet result = database.getResultByStatement(query);
-
-
-        try {
-            result.next();
-            List<String> classesList = this.parseList(result.getObject(6).toString());
-            if (classesList.contains(classs)){
-                throw new IllegalArgumentException();
-            } else {
-                database.executeStatement(studentQueries.getAddEnrolment(String.valueOf(id), result.getObject(6).toString()+","+classs));
-            }
-        } catch (SQLException e) {
-        }
-
-
-    }
-
-    public void updateInfo(int id, String cnp, String name, String adress) {
-        database.executeStatement(studentQueries.getUpdateInfoById(String.valueOf(id),cnp,name,adress));
-    }
-
-    public void addStudInfo(int id, String text, String text1) {
-        database.executeStatement(studentQueries.getAddStudInfoById(String.valueOf(id),text,text1));
-    }
-
-    public void deleteStudInfo(int id) {
-        database.executeStatement(studentQueries.getDeleteStudInfoById(String.valueOf(id)));
-    }
-
-    public void updateStudInfo(int id, String text, String text1) {
-        database.executeStatement(studentQueries.getUpdateStudInfoById(String.valueOf(id),text,text1));
-    }
 }

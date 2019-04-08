@@ -13,8 +13,11 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import sample.business.ClassesLogic;
 import sample.business.TeacherLogic;
+import sample.database.ClassDAL;
 import sample.database.DatabaseConnection;
 import sample.entity.Exam;
+import sample.entity.Materie;
+import sample.entity.Profesor;
 import sample.entity.Student;
 
 import java.io.IOException;
@@ -22,6 +25,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.List;
 
 
 public class TeacherController {
@@ -59,8 +63,8 @@ public class TeacherController {
     public void setId(int id){
         this.id = id;
     }
-
-    DatabaseConnection databaseConnection = new DatabaseConnection();
+    
+    ClassesLogic classesLogic = new ClassesLogic();
 
     public void handleLogoutClick(ActionEvent event) {
         System.out.println("Logout succesfull");
@@ -78,15 +82,12 @@ public class TeacherController {
 
     public void initialize() {
         teacherLogic = new TeacherLogic();
-        ResultSet result = teacherLogic.getStudentInfo(id);
-        try {
-            result.next();
-            teacherID.setText(result.getObject(1).toString());
-            teacherName.setText(result.getObject(2).toString());
-            teacherCNP.setText(result.getObject(3).toString());
-        } catch (SQLException e) {
+        Profesor teacher = teacherLogic.getTeacherInfoById(id);
 
-        }
+        teacherID.setText(String.valueOf(teacher.getId()));
+        teacherName.setText(teacher.getNume());
+        teacherCNP.setText(String.valueOf(teacher.getCnp()));
+
         nume.setCellValueFactory(new PropertyValueFactory<Student,String>("name"));
         cnp.setCellValueFactory(new PropertyValueFactory<Student,String>("cnp"));
         icn.setCellValueFactory(new PropertyValueFactory<Student,String>("icn"));
@@ -99,23 +100,14 @@ public class TeacherController {
         nota.setCellValueFactory(new PropertyValueFactory<Student,String>("nota"));
         data.setCellValueFactory(new PropertyValueFactory<Student,String>("dataexamen"));
 
-        ObservableList<Student> data = teacherLogic.getStudentTableData();
+        ObservableList<Student> data = FXCollections.observableArrayList(teacherLogic.getStudentTableData());
         studentTable.setItems(data);
 
         ClassesLogic classesLogic = new ClassesLogic();
-        ResultSet result2 = classesLogic.getClasses();
+        List<Materie> classes2 = classesLogic.getClasses();
         comboMaterii.getItems().setAll(Collections.emptyList());
-        try {
-            comboMaterii.setPromptText("Select a class..");
-            while(result2.next()){
-                comboMaterii.getItems().add(result2.getObject(2));
-            }
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+        comboMaterii.setPromptText("Select a class..");
+        classes2.forEach(c-> comboMaterii.getItems().add(c.getNume()));
 
     }
 
@@ -125,7 +117,7 @@ public class TeacherController {
         DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
 
         Student student = studentTable.getSelectionModel().getSelectedItem();
-        ObservableList<Exam> data2 = teacherLogic.getExamTableData(student.getName(),dateFormatter.format(dateFrom.getValue()), dateFormatter.format(dateTo.getValue()));
+        ObservableList<Exam> data2 = FXCollections.observableArrayList(teacherLogic.getExamTableData(student.getName(),dateFormatter.format(dateFrom.getValue()), dateFormatter.format(dateTo.getValue())));
         examenTable.setItems(data2);
         examenTable.refresh();
     }

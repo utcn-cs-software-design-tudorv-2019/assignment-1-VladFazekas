@@ -1,20 +1,17 @@
 package sample.business;
 
+import sample.database.ClassDAL;
 import sample.database.ClassesQueries;
 import sample.database.DatabaseConnection;
-
+import sample.entity.Materie;
+import java.util.List;
 import java.sql.ResultSet;
 
 public class ClassesLogic {
 
-    DatabaseConnection database = new DatabaseConnection();
-    String query = null;
-    ClassesQueries c = new ClassesQueries();
+    ClassDAL classDAL =  new ClassDAL();
 
-    public ResultSet getClasses(){
-
-        query = c.getClasses();
-        ResultSet result = database.getResultByStatement(query);
-        return result;
+    public List<Materie> getClasses(){
+        return classDAL.getClasses();
     }
 }

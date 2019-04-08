@@ -4,9 +4,9 @@ public class Profesor {
 
     int id;
     String nume;
-    int cnp;
+    String cnp;
 
-    public Profesor(int id, String nume, int cnp) {
+    public Profesor(int id, String nume, String cnp) {
         this.id = id;
         this.nume = nume;
         this.cnp = cnp;
@@ -28,11 +28,11 @@ public class Profesor {
         this.nume = nume;
     }
 
-    public int getCnp() {
+    public String getCnp() {
         return cnp;
     }
 
-    public void setCnp(int cnp) {
+    public void setCnp(String cnp) {
         this.cnp = cnp;
     }
 }

@@ -2,6 +2,7 @@ package sample.controllers;
 
 
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -12,7 +13,11 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import sample.business.ClassesLogic;
 import sample.business.StudentLogic;
+import sample.database.ClassDAL;
 import sample.database.DatabaseConnection;
+import sample.database.StudentDAL;
+import sample.entity.Materie;
+import sample.entity.Student;
 
 import java.io.IOException;
 import java.sql.ResultSet;
@@ -77,19 +82,13 @@ public class StudentController {
         succesLable.setVisible(false);
         studentLogic = new StudentLogic();
         classesLogic = new ClassesLogic();
-        ResultSet result = studentLogic.getStudentInfo(id);
         succesInfoUpdate.setVisible(false);
-        try {
-            result.next();
-            userName.setText(result.getObject(2).toString());
-            cnp.setText(result.getObject(3).toString());
-            adress.setText(result.getObject(5).toString());
-        } catch (SQLException e) {
+        Student student = studentLogic.getStudentInfo(id);
+        userName.setText(student.getName());
+        cnp.setText(student.getCnp());
+        adress.setText(student.getAddress());
 
-        }
     }
-
-    DatabaseConnection databaseConnection = new DatabaseConnection();
 
     private int id;
 
@@ -114,15 +113,11 @@ public class StudentController {
 
     public void personalInfoButton(ActionEvent actionEvent) {
 
-        ResultSet result = studentLogic.getStudentInfo(id);
-        try {
-            result.next();
-            userName.setText(result.getObject(2).toString());
-            cnp.setText(result.getObject(3).toString());
-            adress.setText(result.getObject(5).toString());
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        Student student = studentLogic.getStudentInfo(id);
+
+        userName.setText(student.getName());
+        cnp.setText(student.getCnp());
+        adress.setText(student.getAddress());
         infopanel.setVisible(true);
         studentInfoPanel.setVisible(false);
         classesEnroll.setVisible(false);
@@ -130,16 +125,14 @@ public class StudentController {
 
     public void studentInfoButton(ActionEvent event) {
         succesInfoUpdate.setVisible(false);
-        ResultSet result = studentLogic.getStudentInfo(id);
-        try {
-            result.next();
-            icn.setText(result.getObject(4).toString());
-            group.setText(result.getObject(7).toString());
-            classes.clear();
-            List<String> classesList = studentLogic.parseList(result.getObject(6).toString());
-            classesList.forEach(c-> classes.appendText(c + "\n"));
-        } catch (SQLException e) {
-        }
+        Student student = studentLogic.getStudentInfo(id);
+
+        icn.setText(student.getIcn());
+        group.setText(student.getGrupa());
+        classes.clear();
+        List<String> classesList = studentLogic.parseList(student.getMaterii());
+        classesList.forEach(c-> classes.appendText(c + "\n"));
+
         infopanel.setVisible(false);
         studentInfoPanel.setVisible(true);
         classesEnroll.setVisible(false);
@@ -148,18 +141,9 @@ public class StudentController {
     public void enrollToClass(ActionEvent event) {
 
         succesLable.setVisible(false);
-        ResultSet result = classesLogic.getClasses();
+        List<Materie> classes2 = classesLogic.getClasses();
         classesCombo.getItems().setAll(Collections.emptyList());
-        try {
-            classesCombo.setPromptText("Select a class..");
-            while(result.next()){
-                classesCombo.getItems().add(result.getObject(2));
-            }
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        classes2.forEach(c -> classesCombo.getItems().add(c.getNume()));
 
         infopanel.setVisible(false);
         studentInfoPanel.setVisible(false);
@@ -209,16 +193,14 @@ public class StudentController {
     public void deleteStudButton(ActionEvent event) {
         studentLogic.deleteStudInfo(id);
         succesInfoUpdate.setVisible(false);
-        ResultSet result = studentLogic.getStudentInfo(id);
-        try {
-            result.next();
-            icn.setText(result.getObject(4).toString());
-            group.setText(result.getObject(7).toString());
-            classes.clear();
-            List<String> classesList = studentLogic.parseList(result.getObject(6).toString());
-            classesList.forEach(c-> classes.appendText(c + "\n"));
-        } catch (SQLException e) {
-        }
+        Student student = studentLogic.getStudentInfo(id);
+
+        icn.setText(student.getIcn());
+        group.setText(student.getGrupa());
+        classes.clear();
+        List<String> classesList = studentLogic.parseList(student.getMaterii());
+        classesList.forEach(c-> classes.appendText(c + "\n"));
+
         infopanel.setVisible(false);
         studentInfoPanel.setVisible(true);
         classesEnroll.setVisible(false);
